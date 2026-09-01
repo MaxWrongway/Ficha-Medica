@@ -1,0 +1,295 @@
+html<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha Médica - Sistema de Ingreso</title>
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-hover: #0369a1;
+            --success: #16a34a;
+            --secondary: #64748b;
+            --danger: #dc2626;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --border: #cbd5e1;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-top: 0;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 600px) {
+            .form-group.full-width { grid-column: span 1; }
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        input, select, textarea {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: 2px solid var(--primary);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .actions {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-save { background: var(--success); color: white; }
+        .btn-clear { background: var(--secondary); color: white; }
+        .btn-close { background: var(--danger); color: white; }
+        button:hover { opacity: 0.9; }
+
+        .search-section {
+            margin-top: 30px;
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-box input {
+            flex: 1;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: white;
+        }
+
+        .results-table th, .results-table td {
+            border: 1px solid var(--border);
+            padding: 10px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .results-table th {
+            background: #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Ingreso de Ficha Médica</h2>
+    
+    <!-- Formulario Principal -->
+    <form id="medicalForm" onsubmit="event.preventDefault(); guardarFicha();">
+        <div class="grid">
+            <div class="form-group">
+                <label for="rut">RUT *</label>
+                <input type="text" id="rut" required placeholder="12345678-K">
+            </div>
+            <div class="form-group">
+                <label for="nombres">Nombres *</label>
+                <input type="text" id="nombres" required>
+            </div>
+            <div class="form-group">
+                <label for="apellidos">Apellidos *</label>
+                <input type="text" id="apellidos" required>
+            </div>
+            <div class="form-group">
+                <label for="fechaNacimiento">Fecha de Nacimiento *</label>
+                <input type="date" id="fechaNacimiento" required>
+            </div>
+            <div class="form-group">
+                <label for="estadoCivil">Estado Civil *</label>
+                <select id="estadoCivil" required>
+                    <option value="">Seleccione...</option>
+                    <option value="Soltero/a">Soltero/a</option>
+                    <option value="Casado/a">Casado/a</option>
+                    <option value="Divorciado/a">Divorciado/a</option>
+                    <option value="Viudo/a">Viudo/a</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="telefono">Teléfono *</label>
+                <input type="tel" id="telefono" required placeholder="+56912345678">
+            </div>
+            <div class="form-group full-width">
+                <label for="email">Email *</label>
+                <input type="email" id="email" required placeholder="correo@ejemplo.com">
+            </div>
+            <div class="form-group full-width">
+                <label for="direccion">Dirección *</label>
+                <input type="text" id="direccion" required>
+            </div>
+            <div class="form-group full-width">
+                <label for="ciudad">Ciudad *</label>
+                <input type="text" id="ciudad" required>
+            </div>
+            <div class="form-group full-width">
+                <label for="comentarios">Comentarios</label>
+                <textarea id="comentarios" placeholder="Observaciones médicas..."></textarea>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="btn-clear" onclick="limpiarFormulario()">Limpiar</button>
+            <button type="button" class="btn-close" onclick="cerrarAplicacion()">Cerrar</button>
+            <button type="submit" class="btn-save">Guardar</button>
+        </div>
+    </form>
+
+    <!-- Sección de Búsqueda -->
+    <div class="search-section">
+        <h3>Buscador de Usuarios</h3>
+        <div class="search-box">
+            <input type="text" id="searchApellido" placeholder="Escriba el apellido a buscar...">
+            <button type="button" class="btn-save" style="background: var(--primary);" onclick="buscarPorApellido()">Buscar</button>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>RUT</th>
+                        <th>Nombre Completo</th>
+                        <th>Ciudad</th>
+                        <th>Teléfono</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsBody">
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: var(--secondary);">No se han realizado búsquedas o no hay resultados.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Inicializar base de datos simulada en LocalStorage
+    if (!localStorage.getItem('fichasMedicas')) {
+        localStorage.setItem('fichasMedicas', JSON.stringify([]));
+    }
+
+    // Función Guardar / Sobrescribir
+    function guardarFicha() {
+        const rut = document.getElementById('rut').value.trim().toUpperCase();
+        let fichas = JSON.parse(localStorage.getItem('fichasMedicas'));
+        
+        const nuevaFicha = {
+            rut: rut,
+            nombres: document.getElementById('nombres').value.trim(),
+            apellidos: document.getElementById('apellidos').value.trim(),
+            fechaNacimiento: document.getElementById('fechaNacimiento').value,
+            estadoCivil: document.getElementById('estadoCivil').value,
+            telefono: document.getElementById('telefono').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            direccion: document.getElementById('direccion').value.trim(),
+            ciudad: document.getElementById('ciudad').value.trim(),
+            comentarios: document.getElementById('comentarios').value.trim()
+        };
+
+        const indexExistente = fichas.findIndex(f => f.rut === rut);
+
+        if (indexExistente !== -1) {
+            // El registro ya existe -> Preguntar si desea sobrescribir
+            const confirmar = confirm(`El paciente con RUT ${rut} ya existe. ¿Desea sobrescribir los datos actuales?`);
+            if (!confirmar) return; // Cancela la operación
+            
+            fichas[indexExistente] = nuevaFicha;
+            alert('Registro actualizado con éxito.');
+        } else {
+            // Registro nuevo
+            fichas.push(nuevaFicha);
+            alert('Nuevo registro guardado con éxito.');
+        }
+
+        localStorage.setItem('fichasMedicas', JSON.stringify(fichas));
+        limpiarFormulario();
+    }
+
+    // Función Limpiar Formulario
+    function limpiarFormulario() {
+        document.getElementById('medicalForm').reset();
+    }
+
+    // Función Cerrar
+    function cerrarAplicacion() {
+        if (confirm("¿Está seguro de que desea cerrar la aplicación?")) {
+            window.close();
+            // Respaldo en caso de que el navegador bloquee el window.close() por seguridad
+            document.body.innerHTML = "<div style='text-align:center; margin-top:100px;'><h2>Aplicación Cerrada Correctamente.</h2><p>Puede cerrar esta pestaña del navegador.</p></div>";
+        }
+    }
