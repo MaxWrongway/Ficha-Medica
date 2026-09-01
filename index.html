@@ -295,10 +295,5 @@
     }
 // Función Buscar por Apellidofunction buscarPorApellido() {const apellidoBusqueda = document.getElementById('searchApellido').value.trim().toLowerCase();const fichas = JSON.parse(localStorage.getItem('fichasMedicas'));const tbody = document.getElementById('resultsBody');tbody.innerHTML = ''; // Limpiar resultados anterioresif (apellidoBusqueda === '') {tbody.innerHTML = <tr><td colspan="5" style="text-align: center; color: var(--secondary);">Por favor, ingrese un apellido para buscar.</td></tr>;return;}// Filtrar coincidencias parciales o totales en el apellidoconst resultados = fichas.filter(f => f.apellidos.toLowerCase().includes(apellidoBusqueda));if (resultados.length === 0) {tbody.innerHTML = <tr><td colspan="5" style="text-align: center; color: var(--danger);">No se encontraron usuarios con ese apellido.</td></tr>;return;}// Renderizar filas encontradasresultados.forEach(f => {const row = document.createElement('tr');row.innerHTML = `${f.rut}\({f.apellidos}, \){f.nombres}${f.ciudad}${f.telefono}${f.email}`;tbody.appendChild(row);});}
 
- <form action="https://api.web3forms.com/submit" method="POST">
-  <input type="hidden" name="access_key" value="067dc64d-9f10-4216-b59c-2a5673374b56">
-  <input type="text" name="name" required>
-  <input type="email" name="email" required>
-  <textarea name="message" required></textarea>
-  <button type="submit">Submit Form</button>
+const payload = {access_key: "067dc64d-9f10-4216-b59c-2a5673374b56",rut: rut,nombres: document.getElementById('nombres').value.trim(),apellidos: document.getElementById('apellidos').value.trim(),fechaNacimiento: document.getElementById('fechaNacimiento').value,estadoCivil: document.getElementById('estadoCivil').value,telefono: document.getElementById('telefono').value.trim(),email: document.getElementById('email').value.trim(),direccion: document.getElementById('direccion').value.trim(),ciudad: document.getElementById('ciudad').value.trim(),comentarios: document.getElementById('comentarios').value.trim()};const response = await fetch("https://api.web3forms.com/submit", {method: "POST",headers: { "Content-Type": "application/json", "Accept": "application/json" },body: JSON.stringify(payload)});const data = await response.json();
 </form>
